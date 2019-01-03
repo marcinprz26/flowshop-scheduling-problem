@@ -30,8 +30,8 @@ public class Crossover {
     }
 
     private static Permutation PMXCrossover(Permutation parent1, Permutation parent2) {
-        ArrayList<Task> child1 = parent1.getPermutation();
-        ArrayList<Task> child2 = parent2.getPermutation();
+        ArrayList<Task> child1 = new ArrayList<>(parent1.getPermutation());
+        ArrayList<Task> child2 = new ArrayList<>(parent2.getPermutation());
 
         for (int i=0; i<2; i++) {
             Task t2 = child2.get(i);
@@ -41,9 +41,7 @@ public class Crossover {
             child1.set(i, t2);
         }
 
-        parent1.setPermutation(child1);
-
-        return parent1;
+        return new Permutation(child1);
     }
 
     private static Permutation orderedCrossover(Permutation parent1, Permutation parent2) {

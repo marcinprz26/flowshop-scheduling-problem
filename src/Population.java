@@ -1,3 +1,5 @@
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -7,16 +9,9 @@ public class Population {
     private ArrayList<Permutation> population;
     private double averageMakespan;
     private ArrayList<Population> top3;
-
-    public ArrayList<Permutation> generateRandomPopulation(int tasks, int machines) {
-        ArrayList<Permutation> population = new ArrayList<>();
-
-        for (int i=0; i<populationNumber; i++) {
-            population.add(new Permutation(tasks, machines, 10));
-        }
-
-        return population;
-    }
+    private long minMakespan = 0,
+            maxMakespan = 0;
+    BigDecimal bd;
 
     public Population(int populationNumber, ArrayList<Permutation> population) {
         this.populationNumber = populationNumber;
@@ -32,18 +27,28 @@ public class Population {
         this.population = generateRandomPopulation(tasks, machines);
     }
 
-    public void roulette() {
+    public ArrayList<Permutation> generateRandomPopulation(int tasks, int machines) {
+        ArrayList<Permutation> population = new ArrayList<>();
+
+        for (int i=0; i<populationNumber; i++) {
+            population.add(new Permutation(tasks, machines, 5));
+        }
+
+        return population;
+    }
+
+    public ArrayList<Permutation> roulette() {
         Random random = new Random();
         ArrayList<Permutation> newPopulation = new ArrayList<>();
-        long rateSum = 0;
+        double rateSum = 0;
 
         for (Permutation p : population) {
             rateSum += this.minmaxRate(p);
         }
 
         for (Permutation p : population) {
-            long rate = (this.minmaxRate(p) / rateSum) * 100;
-            p.setRouletteRate(rate);
+            long rate = (long)((p.getRouletteRate() / rateSum) * 100);
+            p.setRouletteRate((double)rate);
         }
 
         int[] disc = new int[100];
@@ -62,13 +67,26 @@ public class Population {
         }
 
         this.population = newPopulation;
+
+        return population;
     }
 
-    private long minmaxRate(Permutation p) {
-        long minmax[] = getMinMaxMakespan();
-        long rate = Math.abs((p.getMakespan() - minmax[0]) / (minmax[1] - minmax[0]));
+    private double minmaxRate(Permutation p) {
+        if(minMakespan == 0 || maxMakespan == 0) {
+            long minmax[] = getMinMaxMakespan();
+            this.minMakespan = minmax[0];
+            this.maxMakespan = minmax[1];
+        }
 
-        return rate;
+        double rate = ((double)(p.calculateMakespan() - minMakespan) / (double)(maxMakespan - minMakespan)) - 1;
+        rate = Math.abs(rate);
+
+        bd = new BigDecimal(rate);
+        bd = bd.setScale(2, RoundingMode.HALF_UP);
+
+        p.setRouletteRate(bd.doubleValue());
+
+        return bd.doubleValue();
     }
 
     private long[] getMinMaxMakespan() {

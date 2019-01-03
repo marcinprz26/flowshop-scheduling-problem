@@ -47,7 +47,7 @@ public class FlowShopScheduling {
         Print.printPopulation(population);
 
         while(maxGeneration != generations || stableResult < initStable) {
-            population.roulette();
+            populationList = population.roulette();
 
             System.out.println("Selected population:");
             Print.printPopulation(population);
@@ -78,7 +78,7 @@ public class FlowShopScheduling {
                     Permutation mutated = Mutation.mutation(populationList.get(i));
                     populationList.set(i, mutated);
 
-                    System.out.print("Permutation after mutation: ");
+                    System.out.print("Permutation after mutation:  ");
                     Print.printPermutation(mutated);
                     System.out.println();
                 }

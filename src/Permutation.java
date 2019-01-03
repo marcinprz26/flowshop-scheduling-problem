@@ -7,7 +7,7 @@ public class Permutation {
     private int tasks;
     private int machines;
     private long makespan;
-    private long rouletteRate;
+    private double rouletteRate;
     private ArrayList<Task> permutation;
 
     public Permutation(int tasks, int machines, ArrayList<Task> permutation) {
@@ -20,6 +20,12 @@ public class Permutation {
         this.tasks = tasks;
         this.machines = machines;
         this.permutation = this.generateRandomPermutation(tasks, machines, range);
+    }
+
+    public Permutation(ArrayList<Task> permutation) {
+        this.permutation = permutation;
+        this.tasks = permutation.size();
+        this.machines = permutation.get(0).getOperations().size();
     }
 
     public int getTasks() {
@@ -46,11 +52,11 @@ public class Permutation {
         this.makespan = makespan;
     }
 
-    public long getRouletteRate() {
+    public double getRouletteRate() {
         return rouletteRate;
     }
 
-    public void setRouletteRate(long rouletteRate) {
+    public void setRouletteRate(double rouletteRate) {
         this.rouletteRate = rouletteRate;
     }
 
@@ -87,7 +93,7 @@ public class Permutation {
         ArrayList<Task> permutation = new ArrayList<>();
 
         for(int i=0; i<tasks; i++) {
-            permutation.add(new Task(i, machines, range));
+            permutation.add(new Task(i+1, machines, range));
         }
         Collections.shuffle(permutation);
 
@@ -98,6 +104,7 @@ public class Permutation {
     public String toString() {
         return "Permutation{" +
                 "permutation=" + Arrays.toString(permutation.toArray()) +
+                "makespan=" + makespan +
                 '}';
     }
 }
