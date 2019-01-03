@@ -38,12 +38,13 @@ public class Population {
     }
 
     public ArrayList<Permutation> roulette() {
+
         Random random = new Random();
         ArrayList<Permutation> newPopulation = new ArrayList<>();
         double rateSum = 0;
 
         for (Permutation p : population) {
-            rateSum += this.minmaxRate(p);
+            rateSum += this.fittingFunction(p);
         }
 
         for (Permutation p : population) {
@@ -69,6 +70,16 @@ public class Population {
         this.population = newPopulation;
 
         return population;
+    }
+
+    private double fittingFunction(Permutation p) {
+        this.minMakespan = p.getTasks() + p.getMachines() - 1;
+        this.maxMakespan = p.calculateMaxTime();
+
+        double rate = ((double)(p.calculateMakespan() - minMakespan) / (double)(maxMakespan - minMakespan)) - 1;
+        rate = Math.abs(rate);
+
+        return rate;
     }
 
     private double minmaxRate(Permutation p) {

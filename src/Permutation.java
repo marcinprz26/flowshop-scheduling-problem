@@ -89,6 +89,18 @@ public class Permutation {
         return makespan[this.tasks-1][this.machines-1];
     }
 
+    public long calculateMaxTime() {
+        long time = 0;
+
+        for (int j = 0; j < this.tasks; j++) {
+            for (int m = 0; m < this.machines; m++) {
+                time += permutation.get(j).getOperations().get(m);
+            }
+        }
+
+        return time ;
+    }
+
     private ArrayList<Task> generateRandomPermutation(int tasks, int machines, int range) {
         ArrayList<Task> permutation = new ArrayList<>();
 

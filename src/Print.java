@@ -10,11 +10,11 @@ public class Print {
 
     public static void printPermutation(Permutation permutation) {
 
-        System.out.print("<<<<<<<<<<<  ");
+        System.out.print("[ ");
         for (Task task : permutation.getPermutation()) {
             System.out.print(task.getNumber() + " ");
         }
-        System.out.print(" >>>>>>>>>>>   ");
+        System.out.print("] | ");
         System.out.println(permutation.calculateMakespan());
     }
 }

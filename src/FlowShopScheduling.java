@@ -49,6 +49,10 @@ public class FlowShopScheduling {
         while(maxGeneration != generations || stableResult < initStable) {
             populationList = population.roulette();
 
+            System.out.println("-=-=-=-=-=-=-=-");
+            System.out.println("\tStep " + (generations+1));
+            System.out.println("-=-=-=-=-=-=-=-\n");
+
             System.out.println("Selected population:");
             Print.printPopulation(population);
 
@@ -95,6 +99,5 @@ public class FlowShopScheduling {
 
             Print.printPopulation(population);
         }
-
     }
 }
