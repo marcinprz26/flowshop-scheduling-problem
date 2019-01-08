@@ -44,7 +44,9 @@ public class Population {
         double rateSum = 0;
 
         for (Permutation p : population) {
-            rateSum += this.fittingFunction(p);
+//            rateSum += this.fittingFunction(p);
+//            rateSum += this.fittingFunction2(p);
+            rateSum += this.minmaxRate(p);
         }
 
         for (Permutation p : population) {
@@ -72,31 +74,47 @@ public class Population {
         return population;
     }
 
-    private double fittingFunction(Permutation p) {
-        this.minMakespan = p.getTasks() + p.getMachines() - 1;
-        this.maxMakespan = p.calculateMaxTime();
+    private double fittingFunction2(Permutation p) {
+        double rate = (1 / (double)(p.calculateMakespan() - (p.getTasks() + (p.getMachines() - 1)) + 1));
 
-        double rate = ((double)(p.calculateMakespan() - minMakespan) / (double)(maxMakespan - minMakespan)) - 1;
         rate = Math.abs(rate);
-
+        System.out.println(rate);
         return rate;
     }
 
-    private double minmaxRate(Permutation p) {
-        if(minMakespan == 0 || maxMakespan == 0) {
-            long minmax[] = getMinMaxMakespan();
-            this.minMakespan = minmax[0];
-            this.maxMakespan = minmax[1];
-        }
+//    private double fittingFunction(Permutation p) {
+//        this.minMakespan = p.getTasks() + p.getMachines() - 1;
+//        this.maxMakespan = p.calculateMaxTime();
+//
+//        double rate = ((double)(p.calculateMakespan() - minMakespan) / (double)(maxMakespan - minMakespan)) - 1;
+//        rate = Math.abs(rate);
+//        System.out.println(rate);
+//        p.setRouletteRate(rate);
+//
+//        return rate;
+//    }
 
-        double rate = ((double)(p.calculateMakespan() - minMakespan) / (double)(maxMakespan - minMakespan)) - 1;
-        rate = Math.abs(rate);
+    private double minmaxRate(Permutation p) {
+        long minmax[] = getMinMaxMakespan();
+
+        if (p.calculateMakespan() < minMakespan || minMakespan == 0)
+            this.minMakespan = minmax[0];
+        if (p.calculateMakespan() > maxMakespan || maxMakespan == 0)
+            this.maxMakespan = minmax[1];
+
+        double rate;
+        if (maxMakespan != minMakespan) {
+            rate = ((double)(p.calculateMakespan() - minMakespan) / (double)(maxMakespan - minMakespan)) - 1;
+            rate = Math.abs(rate);
+        }
+        else {
+            rate = 1;
+        }
 
         bd = new BigDecimal(rate);
         bd = bd.setScale(2, RoundingMode.HALF_UP);
 
         p.setRouletteRate(bd.doubleValue());
-
         return bd.doubleValue();
     }
 
@@ -115,13 +133,23 @@ public class Population {
 
     public Permutation getBestPermutation() {
         Permutation best = population.get(0);
-        long bestMakespan = 1000;
+        long bestMakespan = Long.MAX_VALUE;
         for (Permutation p : population) {
             if(bestMakespan > p.getMakespan())
                 best = p;
+                bestMakespan = p.getMakespan();
         }
 
         return best;
+    }
+
+    public double calculateAverageMakespan() {
+        double makespanSum = 0;
+        for(Permutation p : population)
+            makespanSum += p.getMakespan();
+        this.averageMakespan = makespanSum / this.populationNumber;
+
+        return averageMakespan;
     }
 
     public int getPopulationNumber() {

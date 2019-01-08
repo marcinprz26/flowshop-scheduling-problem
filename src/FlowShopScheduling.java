@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 public class FlowShopScheduling {
@@ -36,28 +37,24 @@ public class FlowShopScheduling {
         this.crossoverType = crossoverType;
     }
 
-    public void schedule() {
-        Population population = new Population(populationNumber, tasks, machines);
-
-        ArrayList<Permutation> populationList = population.getPopulation();
+    public void schedule(Population population) {
+        ArrayList<Permutation> populationList;
         int generations = 0, stableResult = 0;
         long lastResult = Long.MAX_VALUE;
 
         System.out.println("Initial population:");
         Print.printPopulation(population);
 
-        while(maxGeneration != generations || stableResult < initStable) {
+        while (maxGeneration != generations || stableResult < initStable) {
             populationList = population.roulette();
 
-            System.out.println("-=-=-=-=-=-=-=-");
-            System.out.println("\tStep " + (generations+1));
-            System.out.println("-=-=-=-=-=-=-=-\n");
+            Print.printGeneration(generations);
 
             System.out.println("Selected population:");
             Print.printPopulation(population);
 
             if (random.nextDouble() < crossoverProb) {
-                for (int i = 0; i < populationList.size(); i = i+2) {
+                for (int i = 0; i < populationList.size(); i = i + 2) {
                     System.out.println("Parents: ");
                     Print.printPermutation(populationList.get(i));
                     Print.printPermutation(populationList.get(i + 1));
@@ -98,6 +95,61 @@ public class FlowShopScheduling {
                 lastResult = population.getBestPermutation().getMakespan();
 
             Print.printPopulation(population);
+
+            Print.printAverageMakespan(population.calculateAverageMakespan());
         }
+
+        System.out.println("Generated best permutation:");
+        Print.printPermutationWithOperations(population.getBestPermutation());
+    }
+    public void scheduleWithRandom() {
+        Population population = new Population(populationNumber, tasks, machines);
+
+        schedule(population);
+    }
+
+    public void scheduleWithData() {
+        ArrayList<Integer> operations = new ArrayList<>();
+
+        operations.add(7);
+        operations.add(3);
+
+        operations.add(4);
+        operations.add(6);
+
+        operations.add(3);
+        operations.add(1);
+
+        operations.add(2);
+        operations.add(4);
+
+        operations.add(5);
+        operations.add(2);
+
+        operations.add(3);
+        operations.add(7);
+
+        operations.add(1);
+        operations.add(4);
+
+        ArrayList<Task> tempTasks = new ArrayList<>();
+        for (int n = 0; n < tasks; n++) {
+            ArrayList<Integer> tempOperations = new ArrayList<>();
+            for (int m = 0; m < machines; m++) {
+                tempOperations.add(operations.remove(0));
+            }
+            tempTasks.add(new Task(n, tempOperations));
+        }
+        ArrayList<Permutation> permutations = new ArrayList<>();
+        for (int n = 0; n < populationNumber; n++) {
+            ArrayList<Task> permutationsTasks = new ArrayList<>(tempTasks);
+            Collections.shuffle(permutationsTasks);
+
+            permutations.add(new Permutation(permutationsTasks));
+        }
+
+        Population population = new Population(populationNumber, permutations);
+
+        schedule(population);
     }
 }
