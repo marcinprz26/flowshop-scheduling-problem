@@ -132,14 +132,13 @@ public class FlowShopScheduling {
         }
         ArrayList<Permutation> permutations = new ArrayList<>();
         for (int n = 0; n < tasks; n++) {
-            Collections.shuffle(tempTasks);
-//            Print.printPermutation(new Permutation(tempTasks));
-            permutations.add(new Permutation(tempTasks));
+            ArrayList<Task> permutationsTasks = new ArrayList<>(tempTasks);
+            Collections.shuffle(permutationsTasks);
+
+            permutations.add(new Permutation(permutationsTasks));
         }
 
-        System.out.println();
         Population population = new Population(populationNumber, permutations);
-        Print.printPopulation(population);
 
         schedule(population);
     }
