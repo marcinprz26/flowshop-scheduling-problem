@@ -38,9 +38,7 @@ public class FlowShopScheduling {
     }
 
     public void schedule(Population population) {
-//        Population population = new Population(populationNumber, tasks, machines);
-
-        ArrayList<Permutation> populationList = population.getPopulation();
+        ArrayList<Permutation> populationList;
         int generations = 0, stableResult = 0;
         long lastResult = Long.MAX_VALUE;
 
@@ -50,9 +48,7 @@ public class FlowShopScheduling {
         while (maxGeneration != generations || stableResult < initStable) {
             populationList = population.roulette();
 
-            System.out.println("-=-=-=-=-=-=-=-");
-            System.out.println("\tStep " + (generations + 1));
-            System.out.println("-=-=-=-=-=-=-=-\n");
+            Print.printGeneration(generations);
 
             System.out.println("Selected population:");
             Print.printPopulation(population);
@@ -99,7 +95,12 @@ public class FlowShopScheduling {
                 lastResult = population.getBestPermutation().getMakespan();
 
             Print.printPopulation(population);
+
+            Print.printAverageMakespan(population.calculateAverageMakespan());
         }
+
+        System.out.println("Generated best permutation:");
+        Print.printPermutationWithOperations(population.getBestPermutation());
     }
     public void scheduleWithRandom() {
         Population population = new Population(populationNumber, tasks, machines);
@@ -122,6 +123,15 @@ public class FlowShopScheduling {
         operations.add(2);
         operations.add(4);
 
+        operations.add(5);
+        operations.add(2);
+
+        operations.add(3);
+        operations.add(7);
+
+        operations.add(1);
+        operations.add(4);
+
         ArrayList<Task> tempTasks = new ArrayList<>();
         for (int n = 0; n < tasks; n++) {
             ArrayList<Integer> tempOperations = new ArrayList<>();
@@ -131,7 +141,7 @@ public class FlowShopScheduling {
             tempTasks.add(new Task(n, tempOperations));
         }
         ArrayList<Permutation> permutations = new ArrayList<>();
-        for (int n = 0; n < tasks; n++) {
+        for (int n = 0; n < populationNumber; n++) {
             ArrayList<Task> permutationsTasks = new ArrayList<>(tempTasks);
             Collections.shuffle(permutationsTasks);
 

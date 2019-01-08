@@ -1,4 +1,3 @@
-import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -83,17 +82,17 @@ public class Population {
         return rate;
     }
 
-    private double fittingFunction(Permutation p) {
-        this.minMakespan = p.getTasks() + p.getMachines() - 1;
-        this.maxMakespan = p.calculateMaxTime();
-
-        double rate = ((double)(p.calculateMakespan() - minMakespan) / (double)(maxMakespan - minMakespan)) - 1;
-        rate = Math.abs(rate);
-        System.out.println(rate);
-        p.setRouletteRate(rate);
-
-        return rate;
-    }
+//    private double fittingFunction(Permutation p) {
+//        this.minMakespan = p.getTasks() + p.getMachines() - 1;
+//        this.maxMakespan = p.calculateMaxTime();
+//
+//        double rate = ((double)(p.calculateMakespan() - minMakespan) / (double)(maxMakespan - minMakespan)) - 1;
+//        rate = Math.abs(rate);
+//        System.out.println(rate);
+//        p.setRouletteRate(rate);
+//
+//        return rate;
+//    }
 
     private double minmaxRate(Permutation p) {
         long minmax[] = getMinMaxMakespan();
@@ -134,13 +133,23 @@ public class Population {
 
     public Permutation getBestPermutation() {
         Permutation best = population.get(0);
-        long bestMakespan = 1000;
+        long bestMakespan = Long.MAX_VALUE;
         for (Permutation p : population) {
             if(bestMakespan > p.getMakespan())
                 best = p;
+                bestMakespan = p.getMakespan();
         }
 
         return best;
+    }
+
+    public double calculateAverageMakespan() {
+        double makespanSum = 0;
+        for(Permutation p : population)
+            makespanSum += p.getMakespan();
+        this.averageMakespan = makespanSum / this.populationNumber;
+
+        return averageMakespan;
     }
 
     public int getPopulationNumber() {

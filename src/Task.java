@@ -5,7 +5,7 @@ import java.util.Random;
 public class Task {
 
     private int number;
-    private ArrayList<Integer> operations = new ArrayList<>();
+    private ArrayList<Integer> operations;
 
     public Task(int number, ArrayList<Integer> operations) {
         this.number = number;
