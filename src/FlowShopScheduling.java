@@ -45,6 +45,8 @@ public class FlowShopScheduling {
         System.out.println("Initial population:");
         Print.printPopulation(population);
 
+        Print.printAverageMakespan(population.calculateAverageMakespan());
+
         while (maxGeneration != generations || stableResult < initStable) {
             populationList = population.roulette();
 
@@ -123,14 +125,14 @@ public class FlowShopScheduling {
         operations.add(2);
         operations.add(4);
 
-        operations.add(5);
-        operations.add(2);
-
-        operations.add(3);
-        operations.add(7);
-
-        operations.add(1);
-        operations.add(4);
+//        operations.add(5);
+//        operations.add(2);
+//
+//        operations.add(3);
+//        operations.add(7);
+//
+//        operations.add(1);
+//        operations.add(4);
 
         ArrayList<Task> tempTasks = new ArrayList<>();
         for (int n = 0; n < tasks; n++) {

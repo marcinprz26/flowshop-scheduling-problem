@@ -13,7 +13,7 @@ public class Print {
 
         System.out.print("[ ");
         for (Task task : permutation.getPermutation()) {
-            System.out.print(task.getNumber() + " ");
+            System.out.print(task.getNumber() + 1 + " ");
         }
         System.out.print("] | ");
         System.out.println(permutation.calculateMakespan());
@@ -23,7 +23,7 @@ public class Print {
         ArrayList<Task> perm = permutation.getPermutation();
         System.out.print("[ ");
         for (Task task : perm) {
-            System.out.print(task.getNumber() + " ");
+            System.out.print(task.getNumber() + 1 + " ");
         }
         System.out.print("] | ");
         System.out.println(permutation.calculateMakespan());

@@ -135,9 +135,10 @@ public class Population {
         Permutation best = population.get(0);
         long bestMakespan = Long.MAX_VALUE;
         for (Permutation p : population) {
-            if(bestMakespan > p.getMakespan())
+            if(bestMakespan > p.getMakespan()) {
                 best = p;
                 bestMakespan = p.getMakespan();
+            }
         }
 
         return best;
