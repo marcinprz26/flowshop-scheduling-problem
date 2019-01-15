@@ -1,12 +1,32 @@
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
+import java.util.Scanner;
 
 public class FlowShopScheduling {
 
     private int tasks;
     private int machines;
     private int populationNumber;
+
+    public int getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(int tasks) {
+        this.tasks = tasks;
+    }
+
+    public int getMachines() {
+        return machines;
+    }
+
+    public void setMachines(int machines) {
+        this.machines = machines;
+    }
+
     private int maxGeneration;
     private int initStable;
     private double crossoverProb;
@@ -29,6 +49,18 @@ public class FlowShopScheduling {
                               double crossoverProb, double mutationProb, int crossoverType) {
         this.tasks = tasks;
         this.machines = machines;
+        this.populationNumber = populationNumber;
+        this.maxGeneration = maxGeneration;
+        this.initStable = initStable;
+        this.crossoverProb = crossoverProb;
+        this.mutationProb = mutationProb;
+        this.crossoverType = crossoverType;
+    }
+
+    public FlowShopScheduling(int populationNumber, int maxGeneration, int initStable,
+                              double crossoverProb, double mutationProb, int crossoverType) {
+        this.tasks = getTasks();
+        this.machines = getMachines();
         this.populationNumber = populationNumber;
         this.maxGeneration = maxGeneration;
         this.initStable = initStable;
@@ -110,37 +142,14 @@ public class FlowShopScheduling {
         schedule(population);
     }
 
-    public void scheduleWithData() {
-        ArrayList<Integer> operations = new ArrayList<>();
-
-        operations.add(7);
-        operations.add(3);
-
-        operations.add(4);
-        operations.add(6);
-
-        operations.add(3);
-        operations.add(1);
-
-        operations.add(2);
-        operations.add(4);
-
-//        operations.add(5);
-//        operations.add(2);
-//
-//        operations.add(3);
-//        operations.add(7);
-//
-//        operations.add(1);
-//        operations.add(4);
-
+    public void scheduleWithData(ArrayList<Integer> operations) {
         ArrayList<Task> tempTasks = new ArrayList<>();
-        for (int n = 0; n < tasks; n++) {
+        for (int j = 0; j < tasks; j++) {
             ArrayList<Integer> tempOperations = new ArrayList<>();
             for (int m = 0; m < machines; m++) {
                 tempOperations.add(operations.remove(0));
             }
-            tempTasks.add(new Task(n, tempOperations));
+            tempTasks.add(new Task(j, tempOperations));
         }
         ArrayList<Permutation> permutations = new ArrayList<>();
         for (int n = 0; n < populationNumber; n++) {
@@ -154,4 +163,26 @@ public class FlowShopScheduling {
 
         schedule(population);
     }
+
+    public void scheduleWithFile(String fileName) throws IOException {
+        ArrayList<Integer> operations = new ArrayList<>();
+
+        try (Scanner input = new Scanner(new File(fileName))) {
+            int tasks = input.nextInt();
+            int machines = input.nextInt();
+            int randomSeed = input.nextInt();
+
+            setTasks(tasks);
+            setMachines(machines);
+
+            for (int j = 0; j < tasks; j++) {
+                for (int m = 0; m < machines; m++) {
+                    operations.add(input.nextInt());
+                }
+            }
+        }
+
+        scheduleWithData(operations);
+    }
+
 }
