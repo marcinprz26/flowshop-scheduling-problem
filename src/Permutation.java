@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Objects;
 
 public class Permutation {
 
@@ -110,6 +111,29 @@ public class Permutation {
         Collections.shuffle(permutation);
 
         return permutation;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (object == this) return true;
+        if (!(object instanceof Permutation)) {
+            return false;
+        }
+        Permutation permutation = (Permutation) object;
+        for(int i=0; i<permutation.getPermutation().size(); i++) {
+            if(this.getPermutation().get(i).equals(permutation.getPermutation().get(i))) {
+                continue;
+            } else {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(tasks, machines, makespan, permutation);
     }
 
     @Override

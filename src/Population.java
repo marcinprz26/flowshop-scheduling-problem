@@ -135,21 +135,44 @@ public class Population {
         Permutation best = population.get(0);
         long bestMakespan = Long.MAX_VALUE;
         for (Permutation p : population) {
-            if(bestMakespan > p.getMakespan())
+            if(bestMakespan > p.getMakespan()) {
                 best = p;
                 bestMakespan = p.getMakespan();
+            }
         }
 
         return best;
     }
 
-    public double calculateAverageMakespan() {
-        double makespanSum = 0;
-        for(Permutation p : population)
-            makespanSum += p.getMakespan();
-        this.averageMakespan = makespanSum / this.populationNumber;
+    public Permutation getWorsePermutation() {
+        Permutation worse = population.get(0);
+        long bestMakespan = 0;
+        for (Permutation p : population) {
+            if(bestMakespan < p.getMakespan()) {
+                worse = p;
+                bestMakespan = p.getMakespan();
+            }
+        }
 
-        return averageMakespan;
+        return worse;
+    }
+
+    public double calculateAverageMakespan() {
+        return population.stream().distinct().mapToLong(p -> p.getMakespan()).average().getAsDouble();
+    }
+
+    public ArrayList<Permutation> getUniquePermutations() {
+
+        for(int i=0, j=1; i<population.size()-1; j++) {
+            if (population.get(i).equals(population.get(j))) {
+                if (j == population.size() - 1) {
+                    i++;
+                    j = i + 1;
+                }
+            }
+        }
+
+        return new ArrayList<>();
     }
 
     public int getPopulationNumber() {
