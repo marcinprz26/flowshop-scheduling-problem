@@ -77,9 +77,9 @@ public class Permutation {
                 if (j == 0 && m == 0)
                     makespan[j][m] = permutation.get(j).getOperations().get(m);
                 else if (j == 0)
-                    makespan[j][m] = permutation.get(j).getOperations().get(m-1) + permutation.get(j).getOperations().get(m);
+                    makespan[j][m] = makespan[j][m-1] + permutation.get(j).getOperations().get(m);
                 else if (m == 0)
-                    makespan[j][m] = permutation.get(j-1).getOperations().get(m) + permutation.get(j).getOperations().get(m);
+                    makespan[j][m] = makespan[j-1][m] + permutation.get(j).getOperations().get(m);
                 else
                     makespan[j][m] = Math.max(makespan[j-1][m], makespan[j][m-1]) + permutation.get(j).getOperations().get(m);
             }

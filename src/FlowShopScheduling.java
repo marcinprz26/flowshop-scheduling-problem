@@ -131,15 +131,15 @@ public class FlowShopScheduling {
 
         operations.add(2);
         operations.add(4);
+      
+       operations.add(5);
+       operations.add(2);
 
-        operations.add(5);
-        operations.add(2);
+       operations.add(3);
+       operations.add(7);
 
-        operations.add(3);
-        operations.add(7);
-
-        operations.add(6);
-        operations.add(4);
+       operations.add(1);
+       operations.add(4);
 
         ArrayList<Task> tempTasks = new ArrayList<>();
         for (int n = 1; n < tasks+1; n++) {
