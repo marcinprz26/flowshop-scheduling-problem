@@ -70,6 +70,7 @@ public class FlowShopScheduling {
     }
 
     public void schedule(Population population) {
+        long startTime = System.nanoTime();
         ArrayList<Permutation> populationList;
         int generations = 0, stableResult = 0;
         long lastResult = Long.MAX_VALUE;
@@ -77,7 +78,7 @@ public class FlowShopScheduling {
         System.out.println("Initial population:");
         Print.printPopulation(population);
 
-        Print.printAverageMakespan(population.calculateAverageMakespan());
+        Print.printMakespanWithMessage(population.calculateAverageMakespan(), "Average makespan: ");
 
         while (maxGeneration != generations || stableResult < initStable) {
             populationList = population.roulette();
@@ -130,11 +131,17 @@ public class FlowShopScheduling {
 
             Print.printPopulation(population);
 
-            Print.printAverageMakespan(population.calculateAverageMakespan());
+            Print.printMakespanWithMessage((double) population.getBestPermutation().getMakespan(), "Best makespan: ");
+            Print.printMakespanWithMessage((double) population.getWorsePermutation().getMakespan(), "Worse makespan: ");
+            Print.printMakespanWithMessage(population.calculateAverageMakespan(), "Average makespan: ");
         }
 
         System.out.println("Generated best permutation:");
         Print.printPermutationWithOperations(population.getBestPermutation());
+        long endTime   = System.nanoTime();
+        long totalTime = endTime - startTime;
+        System.out.println("Execution time: " + totalTime);
+
     }
     public void scheduleWithRandom() {
         Population population = new Population(populationNumber, tasks, machines);
@@ -145,6 +152,7 @@ public class FlowShopScheduling {
     public void scheduleWithData(ArrayList<Integer> operations) {
         ArrayList<Task> tempTasks = new ArrayList<>();
         for (int j = 0; j < tasks; j++) {
+          
             ArrayList<Integer> tempOperations = new ArrayList<>();
             for (int m = 0; m < machines; m++) {
                 tempOperations.add(operations.remove(0));

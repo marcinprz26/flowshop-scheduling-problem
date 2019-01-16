@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Crossover {
 
@@ -45,21 +47,33 @@ public class Crossover {
     }
 
     private static Permutation orderedCrossover(Permutation parent1, Permutation parent2) {
-        ArrayList<Task> child1 = parent1.getPermutation();
-        ArrayList<Task> child2 = parent2.getPermutation();
+        ArrayList<Task> child1 = new ArrayList<>();
+        ArrayList<Task> child2 = new ArrayList<>();
 
-        parent1.setPermutation(child1);
+        int cutStart = ThreadLocalRandom.current().nextInt(0, (parent1.getPermutation().size() - 1));
+        int cutEnd = ThreadLocalRandom.current().nextInt(cutStart, (parent1.getPermutation().size() - 1));
 
-        return parent1;
+        return new Permutation(child1);
     }
 
     private static Permutation ownCrossover(Permutation parent1, Permutation parent2) {
-        ArrayList<Task> child1 = parent1.getPermutation();
-        ArrayList<Task> child2 = parent2.getPermutation();
+        ArrayList<Task> child = new ArrayList<>();
+        ArrayList<Task> parent1Perm = parent1.getPermutation();
+        ArrayList<Task> parent2Perm = parent2.getPermutation();
 
-        parent1.setPermutation(child1);
+        int position = ThreadLocalRandom.current().nextInt(1, (parent1.getPermutation().size() / 2) + 1);
+        for(int i=0; i<position; i++) {
+            child.add(parent1Perm.get(i));
+        }
+        while(child.size() != parent1Perm.size()) {
+            Task task = parent2Perm.get(position);
+            if(!child.stream().filter(t -> t.equals(task)).findFirst().isPresent()) {
+                child.add(task);
+            }
+            position = (position + 1) >= parent1Perm.size() ? 0 : position + 1;
+        }
 
-        return parent1;
+        return new Permutation(child);
     }
 
 }

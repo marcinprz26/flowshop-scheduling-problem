@@ -47,7 +47,7 @@ public class Task {
     @Override
     public boolean equals(Object object) {
         Task task = (Task) object;
-        if (this.number != ((Task) object).getNumber())
+        if (this.number != task.getNumber())
             return false;
         return true;
     }
