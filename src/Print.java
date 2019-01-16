@@ -11,12 +11,13 @@ public class Print {
 
     public static void printPermutation(Permutation permutation) {
 
-        System.out.print("[ ");
-        for (Task task : permutation.getPermutation()) {
-            System.out.print(task.getNumber() + 1 + " ");
-        }
-        System.out.print("] | ");
-        System.out.println(permutation.calculateMakespan());
+//        System.out.print("[ ");
+//        for (Task task : permutation.getPermutation()) {
+//            System.out.print(task.getNumber() + 1 + " ");
+//        }
+//        System.out.print("] | ");
+//        System.out.println(permutation.calculateMakespan());
+        permutation.calculateMakespan();
     }
 
     public static void printPermutationWithOperations(Permutation permutation) {
