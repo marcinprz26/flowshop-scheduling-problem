@@ -38,6 +38,7 @@ public class FlowShopScheduling {
     }
 
     public void schedule(Population population) {
+        long startTime = System.nanoTime();
         ArrayList<Permutation> populationList;
         int generations = 0, stableResult = 0;
         long lastResult = Long.MAX_VALUE;
@@ -45,7 +46,7 @@ public class FlowShopScheduling {
         System.out.println("Initial population:");
         Print.printPopulation(population);
 
-        Print.printAverageMakespan(population.calculateAverageMakespan());
+        Print.printMakespanWithMessage(population.calculateAverageMakespan(), "Average makespan: ");
 
         while (maxGeneration != generations || stableResult < initStable) {
             populationList = population.roulette();
@@ -98,11 +99,17 @@ public class FlowShopScheduling {
 
             Print.printPopulation(population);
 
-            Print.printAverageMakespan(population.calculateAverageMakespan());
+            Print.printMakespanWithMessage((double) population.getBestPermutation().getMakespan(), "Best makespan: ");
+            Print.printMakespanWithMessage((double) population.getWorsePermutation().getMakespan(), "Worse makespan: ");
+            Print.printMakespanWithMessage(population.calculateAverageMakespan(), "Average makespan: ");
         }
 
         System.out.println("Generated best permutation:");
         Print.printPermutationWithOperations(population.getBestPermutation());
+        long endTime   = System.nanoTime();
+        long totalTime = endTime - startTime;
+        System.out.println("Execution time: " + totalTime);
+
     }
     public void scheduleWithRandom() {
         Population population = new Population(populationNumber, tasks, machines);
@@ -124,18 +131,18 @@ public class FlowShopScheduling {
 
         operations.add(2);
         operations.add(4);
+      
+       operations.add(5);
+       operations.add(2);
 
-//        operations.add(5);
-//        operations.add(2);
-//
-//        operations.add(3);
-//        operations.add(7);
-//
-//        operations.add(1);
-//        operations.add(4);
+       operations.add(3);
+       operations.add(7);
+
+       operations.add(1);
+       operations.add(4);
 
         ArrayList<Task> tempTasks = new ArrayList<>();
-        for (int n = 0; n < tasks; n++) {
+        for (int n = 1; n < tasks+1; n++) {
             ArrayList<Integer> tempOperations = new ArrayList<>();
             for (int m = 0; m < machines; m++) {
                 tempOperations.add(operations.remove(0));

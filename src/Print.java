@@ -44,8 +44,8 @@ public class Print {
         System.out.println("-=-=-=-=-=-=-=-\n");
     }
 
-    public static void printAverageMakespan(Double average) {
-        System.out.println("Average makespan of population: " + average);
+    public static void printMakespanWithMessage(Double average, String message) {
+        System.out.println(message + average);
         System.out.println();
     }
 }
